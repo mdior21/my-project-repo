@@ -1,0 +1,114 @@
+function getRow(puzzle, row) {
+  if (row < 0 || row >= puzzle.length) {
+    return null; 
+  }
+  return puzzle[row];
+}
+
+function getColumn(puzzle, col) {
+  if (col < 0 || col >= puzzle[0].length) {
+    return null; 
+  }
+
+  const column = [];
+
+  for (let i = 0; i < puzzle.length; i++) {
+    column.push(puzzle[i][col]);
+  }
+
+  return column;
+}
+
+function getSection(puzzle, x, y) {
+  const section = [];
+  const startX = x * 3;
+  const startY = y * 3;
+
+  for (let i = startX; i < startX + 3; i++) {
+    for (let j = startY; j < startY + 3; j++) {
+      section.push(puzzle[i][j]);
+    }
+  }
+
+  return section;
+}
+
+function includes1To9(arr) {
+  const visited = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    const num = arr[i];
+
+    if (num < 1 || num > 9) {
+      return false;
+    }
+
+    if (visited[num]) {
+      return false;
+    }
+
+    visited[num] = true;
+  }
+
+  for (let i = 1; i <= 9; i++) {
+    if (!visited[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+// Define isValidSection function here
+
+function isValidSection(section) {
+  const visited = [];
+
+  for (let i = 0; i < section.length; i++) {
+    const num = section[i];
+
+    if (num < 1 || num > 9 || visited[num]) {
+      return false;
+    }
+
+    visited[num] = true;
+  }
+
+  return true;
+}
+
+function sudokuIsValid(puzzle) {
+  for (let i = 0; i < puzzle.length; i++) {
+    if (!isValidSection(puzzle[i])) {
+      return false;
+    }
+  }
+
+  for (let j = 0; j < puzzle[0].length; j++) {
+    const column = getColumn(puzzle, j);
+    if (!isValidSection(column)) {
+      return false;
+    }
+  }
+
+  for (let x = 0; x < 3; x++) {
+    for (let y = 0; y < 3; y++) {
+      const subgrid = getSection(puzzle, x, y);
+      if (!isValidSection(subgrid)) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+module.exports = {
+  getRow,
+  getColumn,
+  getSection,
+  includes1To9,
+  sudokuIsValid,
+  puzzle,
+  puzzleTwo
+};
